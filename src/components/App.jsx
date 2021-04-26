@@ -1,27 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 import Note from "./Note";
-import notes from "../notes";
+import CreateArea from "./CreateArea";
 
-
-
-//Create a App.jsx component 
-
-//Challenge. Render all the notes inside notes.js as a seperate Note
-//component.
 
 function App() {
+
+    const [notes, setNotes] = useState([])
+
+    //- Pass the new note back to the App.
+    function addNote(newNote) {
+      setNotes(prevNotes => {
+          //- Add new note to an array.
+         return [...prevNotes, newNote];
+      })
+    }
+
+    function deleteNote(id) {
+        setNotes(prevNotes => {
+         return prevNotes.filter((noteItem, index) => {
+            return index !== id;
+          })  
+        })
+    }
+
+    //- Take array and render seperate Note components for each item.
     return (
         <div>
             <Header />
-            {notes.map(noteItem => (
-                <Note 
-                    key={noteItem.key} 
-                    title={noteItem.title} 
+            <CreateArea onAdd={addNote} />
+            {notes.map((noteItem, index) => {
+                return <Note 
+                    key= {index}
+                    id= {index}
+                    title={noteItem.title}
                     content={noteItem.content}
+                    onDelete={deleteNote}
                 />
-            ))}
+            })}
             <Footer />
         </div>
         
